@@ -1,6 +1,6 @@
 /**
-* Template Name: Imperial - v5.7.0
-* Template URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-theme/
+* Template Name: Gp - v4.7.0
+* Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
@@ -45,7 +45,7 @@
    */
   let navbarlinks = select('#navbar .scrollto', true)
   const navbarlinksActive = () => {
-    let position = window.scrollY + 300
+    let position = window.scrollY + 200
     navbarlinks.forEach(navbarlink => {
       if (!navbarlink.hash) return
       let section = select(navbarlink.hash)
@@ -75,23 +75,19 @@
   }
 
   /**
-   * Header fixed top on scroll
+   * Toggle .header-scrolled class to #header when page is scrolled
    */
   let selectHeader = select('#header')
   if (selectHeader) {
-    let headerOffset = selectHeader.offsetTop
-    let nextElement = selectHeader.nextElementSibling
-    const headerFixed = () => {
-      if ((headerOffset - window.scrollY) <= 0) {
-        selectHeader.classList.add('fixed-top')
-        nextElement.classList.add('scrolled-offset')
+    const headerScrolled = () => {
+      if (window.scrollY > 100) {
+        selectHeader.classList.add('header-scrolled')
       } else {
-        selectHeader.classList.remove('fixed-top')
-        nextElement.classList.remove('scrolled-offset')
+        selectHeader.classList.remove('header-scrolled')
       }
     }
-    window.addEventListener('load', headerFixed)
-    onscroll(document, headerFixed)
+    window.addEventListener('load', headerScrolled)
+    onscroll(document, headerScrolled)
   }
 
   /**
@@ -164,27 +160,45 @@
   let preloader = select('#preloader');
   if (preloader) {
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        preloader.remove()
-      }, 100);
+      preloader.remove()
     });
   }
 
   /**
-   * Hero type effect
+   * Clients Slider
    */
-  const typed = select('.typed')
-  if (typed) {
-    let typed_strings = typed.getAttribute('data-typed-items')
-    typed_strings = typed_strings.split(',')
-    new Typed('.typed', {
-      strings: typed_strings,
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
-    });
-  }
+  new Swiper('.clients-slider', {
+    speed: 400,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'bullets',
+      clickable: true
+    },
+    breakpoints: {
+      320: {
+        slidesPerView: 2,
+        spaceBetween: 40
+      },
+      480: {
+        slidesPerView: 3,
+        spaceBetween: 60
+      },
+      640: {
+        slidesPerView: 4,
+        spaceBetween: 80
+      },
+      992: {
+        slidesPerView: 6,
+        spaceBetween: 120
+      }
+    }
+  });
 
   /**
    * Porfolio isotope and filter
@@ -193,8 +207,7 @@
     let portfolioContainer = select('.portfolio-container');
     if (portfolioContainer) {
       let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.portfolio-item',
-        layoutMode: 'fitRows'
+        itemSelector: '.portfolio-item'
       });
 
       let portfolioFilters = select('#portfolio-flters li', true);
@@ -209,7 +222,9 @@
         portfolioIsotope.arrange({
           filter: this.getAttribute('data-filter')
         });
-        aos_init();
+        portfolioIsotope.on('arrangeComplete', function() {
+          AOS.refresh()
+        });
       }, true);
     }
 
@@ -240,18 +255,33 @@
   });
 
   /**
+   * Testimonials slider
+   */
+  new Swiper('.testimonials-slider', {
+    speed: 600,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    },
+    slidesPerView: 'auto',
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'bullets',
+      clickable: true
+    }
+  });
+
+  /**
    * Animation on scroll
    */
-  function aos_init() {
+  window.addEventListener('load', () => {
     AOS.init({
       duration: 1000,
       easing: "ease-in-out",
       once: true,
       mirror: false
     });
-  }
-  window.addEventListener('load', () => {
-    aos_init();
   });
 
 })()
